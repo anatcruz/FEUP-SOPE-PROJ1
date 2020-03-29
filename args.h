@@ -1,7 +1,4 @@
-#ifdef ARGS_H
-#define ARGS_H
-
-typedef struct Args {
+struct Args {
     unsigned int all; //-a, -all
     unsigned int bytes; //-b, --bytes
     unsigned int blockSize; //-B, --block-size=SIZE ; default SIZE=1024
@@ -9,7 +6,7 @@ typedef struct Args {
     unsigned int dereference; //-L, --dereference
     unsigned int separeteDirs; //-S, --separate-dirs
     int maxDepth; //--max-depth=N ; N(0,1,...)
-    char[256] path; //Dir path
-} args;
+    char path[256]; //Dir path
+};
 
-#endif /*ARGS_H*/
+int get_args(int argc, char *argv[]);

@@ -7,13 +7,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <ctype.h>
+
 #include "args.h"
 
 int main(int argc, char *argv[], char *envp[]){
-    if(argc < 3){
-        printf("Usage: %s -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n", argv[0]);
-        exit(1);
-    }
+    get_args(argc, argv);
     return 0;
 }
-//Just checking that commit works
