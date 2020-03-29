@@ -14,6 +14,6 @@ int main(int argc, char *argv[], char *envp[]){
         printf("Usage: %s -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n", argv[0]);
         exit(1);
     }
-
     return 0;
 }
+//Just checking that commit works
