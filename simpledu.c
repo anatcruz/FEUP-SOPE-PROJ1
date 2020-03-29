@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include "args.h"
 
 int main(int argc, char *argv[], char *envp[]){
     if(argc < 3){
