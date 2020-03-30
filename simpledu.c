@@ -1,16 +1,13 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <ctype.h>
-
-#include "args.h"
+#include "simpledu.h"
 
 int main(int argc, char *argv[], char *envp[]){
-    get_args(argc, argv);
+    Args args;
+
+    init_args(&args);
+    if (get_args(&args, argc, argv)!=0){
+        printf("Error getting args!\n");
+        exit(1);
+    }
+
     return 0;
 }
