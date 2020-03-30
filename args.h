@@ -1,4 +1,8 @@
-struct Args {
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct Arguments {
     unsigned int all; //-a, -all
     unsigned int bytes; //-b, --bytes
     unsigned int blockSize; //-B, --block-size=SIZE ; default SIZE=1024
@@ -7,6 +11,7 @@ struct Args {
     unsigned int separeteDirs; //-S, --separate-dirs
     int maxDepth; //--max-depth=N ; N(0,1,...)
     char path[256]; //Dir path
-};
+}Args;
 
-int get_args(int argc, char *argv[]);
+void init_args(Args *args);
+int get_args(Args *args, int argc, char *argv[]);

@@ -1,12 +1,17 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
 #include "args.h"
 
-struct Args args = {0, 0, 1024, 0, 0, 0, -1};
+void init_args(Args *args){
+    args->all = 0;
+    args->bytes = 0;
+    args->blockSize = 1024; //default value
+    args->countLinks = 0;
+    args->dereference = 0;
+    args->separeteDirs = 0;
+    args->maxDepth = -1;
+    args->path[0]=0;
+}
 
-int get_args(int argc, char *argv[]){
+int get_args(Args *args, int argc, char *argv[]){
 
     char *token;
 
@@ -16,15 +21,22 @@ int get_args(int argc, char *argv[]){
     }
 
     for (int i = 1; i < argc; i++){
-        if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--all")){
-            args.all = 1;
+        if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--count-links")){
+            if (args->countLinks) return -1;
+            args->countLinks = 1;
+        }
+        else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--all")){
+            if (args->all) return -1;
+            args->all = 1;
         }
         else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--bytes")){
-            args.bytes = 1;
+            if (args->bytes) return -1;
+            args->bytes = 1;
         }
         else if (!strcmp(argv[i], "-B")){
+            if (args->blockSize != 1024) return -1;
             if (atoi(argv[i+1])){
-                args.blockSize = atoi(argv[i+1]);
+                args->blockSize = atoi(argv[i+1]);
                 i++;
             }
             else{
@@ -32,42 +44,48 @@ int get_args(int argc, char *argv[]){
             } 
         }
         else if (!strcmp(token = strtok(argv[i], "="), "--block-size") ) {
+            if (args->blockSize != 1024) return -1;
             token = strtok(NULL, "=");
             if (atoi(token)){
-                args.blockSize = atoi(token);
+                args->blockSize = atoi(token);
             }
             else{
                 return -1; //SIZE is not a number
             }
         }
-        else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--count-links")){
-            args.countLinks = 1;
-        }
         else if (!strcmp(argv[i], "-L") || !strcmp(argv[i], "--dereference")){
-            args.dereference = 1;
+            if (args->dereference) return -1;
+            args->dereference = 1;
         }
         else if (!strcmp(argv[i], "-S") || !strcmp(argv[i], "--separate-dirs")){
-            args.separeteDirs = 1;
+            if (args->separeteDirs) return -1;
+            args->separeteDirs = 1;
         }
         else if (!strcmp(argv[i], "--max-depth") ) {
+            if (args->maxDepth != -1) return -1;
             token = strtok(NULL, "=");
             if (atoi(token)){
-                args.maxDepth = atoi(token);
+                args->maxDepth = atoi(token);
             }
             else {
                 return -1; //N is not a number
             }
-        }        
+        }
+        else if (argv[i][1] != '-'){
+            if (strlen(args->path)!=0) return -1;
+            strncpy(args->path, argv[i], sizeof(args->path));
+        }
     }
 
     //testing
-    printf(".all: %u\n", args.all);
-    printf(".bytes: %u\n", args.bytes);
-    printf(".blockSize: %u\n", args.blockSize);
-    printf(".countLinks: %u\n", args.countLinks);
-    printf(".dereference: %u\n", args.dereference);
-    printf(".separateDirs: %u\n", args.separeteDirs);
-    printf(".maxDepth: %d\n", args.maxDepth);
+    printf("->all: %u\n", args->all);
+    printf("->bytes: %u\n", args->bytes);
+    printf("->blockSize: %u\n", args->blockSize);
+    printf("->countLinks: %u\n", args->countLinks);
+    printf("->dereference: %u\n", args->dereference);
+    printf("->separateDirs: %u\n", args->separeteDirs);
+    printf("->maxDepth: %d\n", args->maxDepth);
+    printf("->path: %s\n", args->path);
 
     return 0;
 }
