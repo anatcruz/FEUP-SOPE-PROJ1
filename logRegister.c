@@ -33,7 +33,7 @@ void writeLog(double instant, char *action, char *info){
     strcat(temp, action);
     strcat(temp, " - ");
     strcat(temp, info);
-    strcat(temp, "\0");
+    strcat(temp, "\n");
 
     write(fd, temp, strlen(temp));
 }

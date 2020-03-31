@@ -15,7 +15,7 @@ int get_args(Args *args, int argc, char *argv[]){
 
     char *token;
 
-    if(argc < 3){
+    if(argc < 3 || argc > 10){
         printf("Usage: %s -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n", argv[0]);
         return -1;
     }
@@ -77,7 +77,13 @@ int get_args(Args *args, int argc, char *argv[]){
         }
     }
 
-    //testing
+    //print_args(args);
+
+    return 0;
+}
+
+//Testing function
+void print_args(Args *args) {
     printf("->all: %u\n", args->all);
     printf("->bytes: %u\n", args->bytes);
     printf("->blockSize: %u\n", args->blockSize);
@@ -86,6 +92,4 @@ int get_args(Args *args, int argc, char *argv[]){
     printf("->separateDirs: %u\n", args->separeteDirs);
     printf("->maxDepth: %d\n", args->maxDepth);
     printf("->path: %s\n", args->path);
-
-    return 0;
 }

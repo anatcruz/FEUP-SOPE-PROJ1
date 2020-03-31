@@ -15,3 +15,4 @@ typedef struct Arguments {
 
 void init_args(Args *args);
 int get_args(Args *args, int argc, char *argv[]);
+void print_args(Args *args);
