@@ -39,8 +39,8 @@ int list_info(Args *args) {
                 printf("%ld\t%s\n",stat_buf.st_size, direntp->d_name);
             }
             else {
-                int blocks = stat_buf.st_size/args->blockSize;
-                if (stat_buf.st_size%args->blockSize !=0 )
+                int blocks = stat_buf.st_blocks*512/args->blockSize;
+                if ((stat_buf.st_blocks*512)%args->blockSize !=0)
                     blocks+=1;
 
                 printf("%d\t%s\n",blocks, direntp->d_name);
