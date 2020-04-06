@@ -18,3 +18,4 @@ void writeLog(double instant, char *action, char *info);
 
 void logArgs(int argc, char *argv[]);
 void logExit(int status);
+void logEntry(char *path, long int size);

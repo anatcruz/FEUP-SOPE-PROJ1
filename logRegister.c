@@ -26,7 +26,7 @@ void initLog(){
 
 void writeLog(double instant, char *action, char *info){
     char temp[256];
-    sprintf(temp,"%.2f - %.8d - %s - %s\n",instant, getpid(), action, info);
+    sprintf(temp,"%.2f - %.8d - %s - %s\n", instant, getpid(), action, info);
 
     write(fd, temp, strlen(temp));
 }
@@ -54,4 +54,12 @@ void logExit(int status){
     
     close(fd);
     exit(status);
+}
+
+void logEntry(char *path, long int size){
+    clock_t current = clock();
+    char temp[256];
+    sprintf(temp, "%ld %s", size, path);
+
+    writeLog(getInstant(current), "ENTRY", temp);
 }
