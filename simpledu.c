@@ -40,19 +40,20 @@ int list_info(Args *args) {
         else
             lstat(path, &stat_buf);
         
-
-        //Regular Files
-        if (S_ISREG(stat_buf.st_mode) && args->all){
+        int fileSize;
+        //Files
+        if ((S_ISREG(stat_buf.st_mode) || S_ISLNK(stat_buf.st_mode)) && args->all){
             if (args->bytes){
-                printf("%ld\t%s\n",stat_buf.st_size, path);
+                fileSize = stat_buf.st_size;
             }
-            else {
-                int blocks = stat_buf.st_blocks*512/args->blockSize;
+            else {//get fileSize in blocks
+                fileSize = stat_buf.st_blocks*512/args->blockSize;
                 if ((stat_buf.st_blocks*512)%args->blockSize !=0)
-                    blocks+=1;
-
-                printf("%d\t%s\n",blocks, path);
+                    fileSize+=1;
             }
+
+            printf("%d\t%s\n", fileSize, path);
+            logEntry(path, fileSize);
         }
         //Directories
         /*else {
