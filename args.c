@@ -77,6 +77,9 @@ int get_args(Args *args, int argc, char *argv[]){
         }
     }
 
+    if (args->path[strlen(args->path) - 1] != '/')
+        strcat(args->path, "/");
+
     //print_args(args);
 
     return 0;
