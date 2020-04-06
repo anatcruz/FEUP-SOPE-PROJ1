@@ -17,7 +17,7 @@ int main(int argc, char *argv[], char *envp[]){
         logExit(1);
     }
 
-    return 0;
+    logExit(0);
 }
 
 int list_info(Args *args) {
@@ -31,19 +31,27 @@ int list_info(Args *args) {
     }
 
     while ((direntp = readdir(dir)) != NULL) {
-        stat(direntp->d_name, &stat_buf);
+        char path[256];
+        strcpy(path, args->path);
+        strcat(path, direntp->d_name);
+
+        if (args->dereference)
+            stat(path, &stat_buf);
+        else
+            lstat(path, &stat_buf);
+        
 
         //Regular Files
         if (S_ISREG(stat_buf.st_mode) && args->all){
             if (args->bytes){
-                printf("%ld\t%s\n",stat_buf.st_size, direntp->d_name);
+                printf("%ld\t%s\n",stat_buf.st_size, path);
             }
             else {
                 int blocks = stat_buf.st_blocks*512/args->blockSize;
                 if ((stat_buf.st_blocks*512)%args->blockSize !=0)
                     blocks+=1;
 
-                printf("%d\t%s\n",blocks, direntp->d_name);
+                printf("%d\t%s\n",blocks, path);
             }
         }
         //Directories
