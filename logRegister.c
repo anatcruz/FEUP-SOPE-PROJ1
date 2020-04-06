@@ -26,14 +26,7 @@ void initLog(){
 
 void writeLog(double instant, char *action, char *info){
     char temp[256];
-    char pid[50];
-    sprintf(temp,"%.2f - ",instant);
-    sprintf(pid, "%.8d - ", getpid());
-    strcat(temp, pid);
-    strcat(temp, action);
-    strcat(temp, " - ");
-    strcat(temp, info);
-    strcat(temp, "\n");
+    sprintf(temp,"%.2f - %.8d - %s - %s\n",instant, getpid(), action, info);
 
     write(fd, temp, strlen(temp));
 }
@@ -59,5 +52,6 @@ void logExit(int status){
 
     writeLog(getInstant(current), "EXIT", stat);
     
+    close(fd);
     exit(status);
 }
