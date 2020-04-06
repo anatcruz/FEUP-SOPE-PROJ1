@@ -14,7 +14,10 @@ void initLog(){
     logfile = getenv("LOG_FILENAME");
     if (logfile==NULL){
         logfile = "log.txt";
-        setenv(logfile, "LOG_FILENAME", 1);
+        if(setenv(logfile, "LOG_FILENAME", 1)!=0){
+            perror("Setenv error");
+            logExit(1);
+        }
     }
 
     fd=open(logfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
