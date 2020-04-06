@@ -28,7 +28,7 @@ void writeLog(double instant, char *action, char *info){
     char temp[256];
     char pid[50];
     sprintf(temp,"%.2f - ",instant);
-    sprintf(pid, "%d - ", getpid());
+    sprintf(pid, "%.8d - ", getpid());
     strcat(temp, pid);
     strcat(temp, action);
     strcat(temp, " - ");
