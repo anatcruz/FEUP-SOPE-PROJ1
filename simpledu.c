@@ -55,10 +55,25 @@ int list_info(Args *args) {
             printf("%d\t%s\n", fileSize, path);
             logEntry(path, fileSize);
         }
-        //Directories
-        /*else {
-            ...
-        }*/
+        //Directories - NEEDS CHECKING!
+        else if(S_ISDIR(stat_buf.st_mode)){
+            pid_t pid = fork();
+
+            if(pid < 0){ //Erro
+                printf("ERROR!");
+                logExit(1);
+            }
+            else if(pid < 0){ //Parent
+                wait(NULL);
+            } 
+            else{ //Child
+                strcpy(args->path, path);
+                strcat(args->path, direntp->d_name);
+                list_info(&args);
+                args->maxDepth--;
+                logExit(0);
+            }
+        }
     }
 
     return 0;
