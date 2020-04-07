@@ -1,0 +1,18 @@
+0.47 - 00013483 - CREATE - ./simpledu TestDir/ -a -l
+0.81 - 00013483 - ENTRY - 28 TestDir/avocantigas.jpeg
+0.97 - 00013483 - ENTRY - 56 TestDir/BeeMovie.txt
+-1.26 - 00013485 - ENTRY - 0 TestDir/D1/Da/F3.BIN
+-1.00 - 00013485 - EXIT - 0
+-1.49 - 00013486 - ENTRY - 132 TestDir/D1/Db/archive.zip
+-1.27 - 00013486 - ENTRY - 66712 TestDir/D1/Db/discord-0.0.10.deb
+-1.45 - 00013487 - ENTRY - 0 TestDir/D1/Db/Dx/doc.pdf
+-1.16 - 00013487 - ENTRY - 0 TestDir/D1/Db/Dx/output.log
+-0.99 - 00013487 - EXIT - 0
+-0.88 - 00013486 - EXIT - 0
+-0.91 - 00013484 - ENTRY - 0 TestDir/D1/dep.d
+-0.68 - 00013484 - ENTRY - 0 TestDir/D1/src.c
+-0.54 - 00013484 - EXIT - 0
+-1.50 - 00013488 - ENTRY - 0 TestDir/D2/F2.BIN
+-1.29 - 00013488 - ENTRY - 1 TestDir/D2/symblnk
+-1.20 - 00013488 - EXIT - 0
+1.64 - 00013483 - EXIT - 0

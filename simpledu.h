@@ -12,4 +12,4 @@
 #include "args.h"
 #include "logRegister.h"
 
-int list_info(Args *args);
+int list_info(Args args);

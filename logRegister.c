@@ -1,6 +1,5 @@
 #include "logRegister.h"
 
-char *logfile;
 int fd;
 clock_t start;
 
@@ -10,11 +9,12 @@ double getInstant(clock_t current){
 
 void initLog(){
     start = clock();
+    char *logfile;
 
     logfile = getenv("LOG_FILENAME");
     if (logfile==NULL){
         logfile = "log.txt";
-        if(setenv(logfile, "LOG_FILENAME", 1)!=0){
+        if(setenv("LOG_FILENAME", logfile, 1)!=0){
             perror("Setenv error");
             logExit(1);
         }
