@@ -83,9 +83,6 @@ int get_args(Args *args, int argc, char *argv[]){
         }
     }
 
-    if (args->path[strlen(args->path) - 1] != '/')
-        strcat(args->path, "/");
-
     //print_args(args);
 
     return 0;
@@ -99,6 +96,6 @@ void print_args(Args *args) {
     printf("->countLinks: %u\n", args->countLinks);
     printf("->dereference: %u\n", args->dereference);
     printf("->separateDirs: %u\n", args->separateDirs);
-    printf("->maxDepth: %d\n", args->maxDepth);
+    printf("->maxDepth: %ld\n", args->maxDepth);
     printf("->path: %s\n", args->path);
 }

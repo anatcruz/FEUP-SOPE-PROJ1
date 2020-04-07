@@ -11,7 +11,7 @@ int main(int argc, char *argv[], char *envp[]){
     }
     logArgs(argc, argv);
     
-    if (list_info(args)==-1){
+    if (list_info(args)<0){
         printf("Error reading directory\n");
         logExit(1);
     }
@@ -27,40 +27,42 @@ int list_info(Args args) {
 
     if ((dir = opendir(args.path)) == NULL){
         perror(args.path);  
-        return -1;
+        logExit(1);
     }
 
-    while ((direntp = readdir(dir)) != NULL) {
-        if(!strcmp(direntp->d_name,".") || !strcmp(direntp->d_name,".."))
-            continue;
+    char origpath[256]; //DU prints without '/' in the end of the path if it wasn't given, saving path to print dir later
+    strcpy(origpath, args.path);
 
+    if (args.path[strlen(args.path) - 1] != '/')
+        strcat(args.path, "/");
+
+    while ((direntp = readdir(dir)) != NULL) {
         char path[256];
         strcpy(path, args.path);
         strcat(path, direntp->d_name);
+
+        if(!strcmp(direntp->d_name,"..")) continue;
+        else if (!strcmp(direntp->d_name,".")){
+            stat(path, &stat_buf);
+
+            dirSize+=get_size(stat_buf, args);
+            continue;
+        }
 
         if (args.dereference)
             stat(path, &stat_buf);
         else
             lstat(path, &stat_buf);
         
-        int fileSize;
         //Files
         if (S_ISREG(stat_buf.st_mode) || S_ISLNK(stat_buf.st_mode)){
-            if (args.bytes){
-                fileSize = stat_buf.st_size;
-            }
-            else {//get fileSize in blocks
-                fileSize = stat_buf.st_blocks*512/args.blockSize;
-                if ((stat_buf.st_blocks*512)%args.blockSize !=0)
-                    fileSize+=1;
-            }
+            int fileSize = get_size(stat_buf, args);
             dirSize+=fileSize;
-
             logEntry(path, fileSize);
             if(args.all && args.maxDepth>0)
                 printf("%d\t%s\n", fileSize, path);
         }
-        //Directories - NEEDS CHECKING!
+        //Directories
         else if(S_ISDIR(stat_buf.st_mode)){
             int pp[2];
             if (pipe(pp) < 0) {
@@ -75,18 +77,16 @@ int list_info(Args args) {
                 logExit(1);
             }
             else if(pid > 0){ //Parent
-                close(pp[1]);
                 wait(NULL);
 
                 if(!args.separateDirs){
+                    close(pp[1]);
                     int size;
                     read(pp[0], &size, sizeof(int));
                     dirSize+=size;
                 }
             }
             else{ //Child
-                close(pp[0]);
-
                 strcpy(args.path, path);
                 strcat(args.path, "/");
                 if(args.maxDepth!=__INT64_MAX__)
@@ -94,6 +94,7 @@ int list_info(Args args) {
                 int size = list_info(args);
 
                 if(!args.separateDirs){
+                    close(pp[0]);
                     write(pp[1], &size, sizeof(int));
                 }
 
@@ -103,8 +104,21 @@ int list_info(Args args) {
     }
 
     if(args.maxDepth>=0){
-        printf("%d\t%s\n", dirSize, args.path);
+        printf("%d\t%s\n", dirSize, origpath);
     }
 
     return dirSize;
+}
+
+int get_size(struct stat stat_buf, Args args){
+    int size;
+    if (args.bytes){
+        size = stat_buf.st_size;
+    }
+    else {//get Size in blocks
+        size = stat_buf.st_blocks*512/args.blockSize;
+        if ((stat_buf.st_blocks*512)%args.blockSize !=0)
+            size+=1;
+    }
+    return size;
 }

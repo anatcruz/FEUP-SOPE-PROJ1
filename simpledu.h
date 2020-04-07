@@ -13,3 +13,4 @@
 #include "logRegister.h"
 
 int list_info(Args args);
+int get_size(struct stat stat_buf, Args args);
