@@ -15,7 +15,7 @@ int get_args(Args *args, int argc, char *argv[]){
 
     char *token;
 
-    if(argc < 3 || argc > 10){
+    if(argc < 2 || argc > 10){
         printf("Usage: %s -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n", argv[0]);
         return -1;
     }

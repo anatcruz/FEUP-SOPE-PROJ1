@@ -88,7 +88,6 @@ int list_info(Args args) {
             }
             else{ //Child
                 strcpy(args.path, path);
-                strcat(args.path, "/");
                 if(args.maxDepth!=__INT64_MAX__)
                     args.maxDepth--;
                 int size = list_info(args);
