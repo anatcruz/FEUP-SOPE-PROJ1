@@ -59,8 +59,10 @@ int list_info(Args args) {
             int fileSize = get_size(stat_buf, args);
             dirSize+=fileSize;
             logEntry(path, fileSize);
-            if(args.all && args.maxDepth>0)
+            if(args.all && args.maxDepth>0){
                 printf("%d\t%s\n", fileSize, path);
+                fflush(stdout);
+            }
         }
         //Directories
         else if(S_ISDIR(stat_buf.st_mode)){
@@ -104,6 +106,7 @@ int list_info(Args args) {
 
     if(args.maxDepth>=0){
         printf("%d\t%s\n", dirSize, origpath);
+        fflush(stdout);
     }
 
     return dirSize;
