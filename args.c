@@ -6,8 +6,8 @@ void init_args(Args *args){
     args->blockSize = 1024; //default value
     args->countLinks = 0;
     args->dereference = 0;
-    args->separeteDirs = 0;
-    args->maxDepth = -1;
+    args->separateDirs = 0;
+    args->maxDepth = __INT64_MAX__; //default value to search all
     args->path[0]=0;
 }
 
@@ -58,17 +58,23 @@ int get_args(Args *args, int argc, char *argv[]){
             args->dereference = 1;
         }
         else if (!strcmp(argv[i], "-S") || !strcmp(argv[i], "--separate-dirs")){
-            if (args->separeteDirs) return -1;
-            args->separeteDirs = 1;
+            if (args->separateDirs) return -1;
+            args->separateDirs = 1;
         }
         else if (!strcmp(argv[i], "--max-depth") ) {
-            if (args->maxDepth != -1) return -1;
+            if (args->maxDepth!=__INT64_MAX__) return -1;
             token = strtok(NULL, "=");
-            if (atoi(token)){
-                args->maxDepth = atoi(token);
+            if(!strcmp(token,"0")){
+                args->maxDepth = 0;
             }
-            else {
-                return -1; //N is not a number
+            else{
+                int num = atoi(token);
+                if (num>0){
+                    args->maxDepth = atoi(token);
+                }
+                else {
+                    return -1; //N is not a number or is not valid
+                }
             }
         }
         else if (argv[i][1] != '-'){
@@ -92,7 +98,7 @@ void print_args(Args *args) {
     printf("->blockSize: %u\n", args->blockSize);
     printf("->countLinks: %u\n", args->countLinks);
     printf("->dereference: %u\n", args->dereference);
-    printf("->separateDirs: %u\n", args->separeteDirs);
+    printf("->separateDirs: %u\n", args->separateDirs);
     printf("->maxDepth: %d\n", args->maxDepth);
     printf("->path: %s\n", args->path);
 }

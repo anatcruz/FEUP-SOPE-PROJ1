@@ -8,8 +8,8 @@ typedef struct Arguments {
     unsigned int blockSize; //-B, --block-size=SIZE ; default SIZE=1024
     unsigned int countLinks; //-l, --count-links
     unsigned int dereference; //-L, --dereference
-    unsigned int separeteDirs; //-S, --separate-dirs
-    int maxDepth; //--max-depth=N ; N(0,1,...)
+    unsigned int separateDirs; //-S, --separate-dirs
+    long int maxDepth; //--max-depth=N ; N(0,1,...)
     char path[256]; //Dir path
 }Args;
 
