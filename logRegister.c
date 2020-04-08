@@ -6,7 +6,7 @@ struct timespec start;
 double getInstant(){
     struct timespec current;
     clock_gettime(CLOCK_MONOTONIC, &current);
-    return ((current.tv_sec - start.tv_sec)*1e9 + (current.tv_nsec - start.tv_nsec)*1e-6);
+    return ((current.tv_sec - start.tv_sec)*1000 + (current.tv_nsec - start.tv_nsec)/1e6);
 }
 
 void initLog(){
@@ -64,4 +64,34 @@ void logEntry(char *path, long int size){
     sprintf(temp, "%ld %s", size, path);
 
     writeLog(getInstant(), "ENTRY", temp);
+}
+
+void logFork(Args args){
+    char temp[256] = "";
+
+    if (args.countLinks) strcat(temp,"-l ");
+    strcat(temp,args.path);
+    if (args.all) strcat(temp," -a");
+    if(args.bytes) strcat(temp," -b");
+    if (args.blockSize!=1024){
+        char size[16];
+        sprintf(size," --block-size=%d",args.blockSize);
+        strcat(temp,size);
+    }
+    if(args.dereference) strcat(temp," -L");
+    if(args.separateDirs) strcat(temp," -S");
+    if(args.maxDepth!=__INT64_MAX__){
+        char depth[16];
+        sprintf(depth," --max-depth=%ld",args.maxDepth);
+        strcat(temp,depth);
+    }
+    writeLog(getInstant(), "CREATE", temp);
+}
+
+void logRecvPipe(char *msg){
+    writeLog(getInstant(), "RECV_SIGNAL", msg);
+}
+
+void logSendPipe(char *msg){
+    writeLog(getInstant(), "SEND_SIGNAL", msg);
 }

@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,6 +7,8 @@
 #include <fcntl.h>
 #include <time.h>
 #include <string.h>
+
+#include "args.h"
 
 //Gets elapsed time in ms from start
 double getInstant();
@@ -19,3 +22,6 @@ void writeLog(double instant, char *action, char *info);
 void logArgs(int argc, char *argv[]);
 void logExit(int status);
 void logEntry(char *path, long int size);
+void logFork(Args args);
+void logRecvPipe(char *msg);
+void logSendPipe(char *msg);

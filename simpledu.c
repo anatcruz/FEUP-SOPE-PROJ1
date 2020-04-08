@@ -81,6 +81,9 @@ int list_info(Args args) {
                     close(pp[1]);
                     int subSize=0;
                     read(pp[0], &subSize, sizeof(int));
+                    char s[56];
+                    sprintf(s, "%d",subSize);
+                    logRecvPipe(s);
                     dirSize+=subSize;
                 }
             }
@@ -88,11 +91,17 @@ int list_info(Args args) {
                 strcpy(args.path, path);
                 if(args.maxDepth!=__INT64_MAX__)
                     args.maxDepth--;
+
+                logFork(args);
+
                 int size = list_info(args);
 
                 if(!args.separateDirs){
                     close(pp[0]);
                     write(pp[1], &size, sizeof(int));
+                    char s[56];
+                    sprintf(s, "%d", size);
+                    logSendPipe(s);
                 }
 
                 logExit(0);
