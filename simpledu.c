@@ -83,9 +83,9 @@ int list_info(Args args) {
 
                 if(!args.separateDirs){
                     close(pp[1]);
-                    int size;
-                    read(pp[0], &size, sizeof(int));
-                    dirSize+=size;
+                    int subSize=0;
+                    read(pp[0], &subSize, sizeof(int));
+                    dirSize+=subSize;
                 }
             }
             else{ //Child
@@ -119,7 +119,7 @@ int get_size(struct stat stat_buf, Args args){
     }
     else {//get Size in blocks
         size = stat_buf.st_blocks*512/args.blockSize;
-        if ((stat_buf.st_blocks*512)%args.blockSize !=0)
+        if ((stat_buf.st_blocks*512)%args.blockSize!=0)
             size+=1;
     }
     return size;
