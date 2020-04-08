@@ -74,11 +74,7 @@ int list_info(Args args) {
 
             pid_t pid = fork();
 
-            if(pid < 0){ //Erro
-                printf("Fork error!");
-                logExit(1);
-            }
-            else if(pid > 0){ //Parent
+            if(pid > 0){ //Parent
                 wait(NULL);
 
                 if(!args.separateDirs){
@@ -88,7 +84,7 @@ int list_info(Args args) {
                     dirSize+=subSize;
                 }
             }
-            else{ //Child
+            else if (pid==0){ //Child
                 strcpy(args.path, path);
                 if(args.maxDepth!=__INT64_MAX__)
                     args.maxDepth--;
@@ -101,10 +97,15 @@ int list_info(Args args) {
 
                 logExit(0);
             }
+            else{ //Error
+                printf("Fork error!");
+                logExit(1);
+            }
         }
     }
 
     if(args.maxDepth>=0){
+        logEntry(origpath, dirSize);
         printf("%d\t%s\n", dirSize, origpath);
         fflush(stdout);
     }
