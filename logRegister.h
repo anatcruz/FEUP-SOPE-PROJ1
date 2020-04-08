@@ -7,8 +7,8 @@
 #include <time.h>
 #include <string.h>
 
-//Gets 
-double getInstant(clock_t current);
+//Gets elapsed time in ms from start
+double getInstant();
 
 //Gets start time and Sets and Opens log file
 void initLog();

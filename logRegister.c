@@ -1,14 +1,16 @@
 #include "logRegister.h"
 
 int fd;
-clock_t start;
+struct timespec start;
 
-double getInstant(clock_t current){
-    return (current - start)/(CLOCKS_PER_SEC /(double)1000);
+double getInstant(){
+    struct timespec current;
+    clock_gettime(CLOCK_MONOTONIC, &current);
+    return ((current.tv_sec - start.tv_sec)*1e9 + (current.tv_nsec - start.tv_nsec)*1e-6);
 }
 
 void initLog(){
-    start = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start);
     char *logfile;
 
     logfile = getenv("LOG_FILENAME");
@@ -35,7 +37,6 @@ void writeLog(double instant, char *action, char *info){
 }
 
 void logArgs(int argc, char *argv[]){
-    clock_t current = clock();
     char temp[256] = "";
 
     for(int i=0;i<argc;i++){
@@ -45,24 +46,22 @@ void logArgs(int argc, char *argv[]){
         }
     }
 
-    writeLog(getInstant(current), "CREATE", temp);
+    writeLog(getInstant(), "CREATE", temp);
 }
 
 void logExit(int status){
-    clock_t current = clock();
     char stat[2];
     sprintf(stat, "%d", status);
 
-    writeLog(getInstant(current), "EXIT", stat);
+    writeLog(getInstant(), "EXIT", stat);
     
     close(fd);
     exit(status);
 }
 
 void logEntry(char *path, long int size){
-    clock_t current = clock();
     char temp[256];
     sprintf(temp, "%ld %s", size, path);
 
-    writeLog(getInstant(current), "ENTRY", temp);
+    writeLog(getInstant(), "ENTRY", temp);
 }
