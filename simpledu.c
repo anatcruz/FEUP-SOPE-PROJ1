@@ -119,8 +119,6 @@ int get_size(struct stat stat_buf, Args args){
     }
     else {//get Size in blocks
         size = stat_buf.st_blocks*512/args.blockSize;
-        if ((stat_buf.st_blocks*512)%args.blockSize!=0)
-            size+=1;
     }
     return size;
 }
