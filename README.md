@@ -18,6 +18,8 @@ Flags | Descrição
 ### Features
 - Todas as features pedidas estão implementadas e funcionais
 - A análise de diretórios é feita por recursividade
+- Registos guardados no ficheiro log.txt
+- Não permite flags repetidas
 
 ### Falta implementar
 - Handler de sinais
