@@ -35,7 +35,6 @@ int get_args(Args *args, int argc, char *argv[]){
         }
         else if (!strcmp(argv[i], "-B")){
             if (args->blockSize != 1024) return -1;
-            if (args->bytes) args->bytes=0;
             if (atoi(argv[i+1])){
                 args->blockSize = atoi(argv[i+1]);
                 i++;
@@ -46,7 +45,6 @@ int get_args(Args *args, int argc, char *argv[]){
         }
         else if (!strcmp(token = strtok(argv[i], "="), "--block-size") ) {
             if (args->blockSize != 1024) return -1;
-            if (args->bytes) args->bytes=0;
             token = strtok(NULL, "=");
             if (atoi(token)){
                 args->blockSize = atoi(token);
